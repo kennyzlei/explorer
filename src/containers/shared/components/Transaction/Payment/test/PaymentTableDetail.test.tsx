@@ -6,12 +6,13 @@ import mockPaymentDestinationTag from './mock_data/PaymentWithDestinationTag.jso
 import mockPaymentPartial from './mock_data/PaymentWithPartial.json'
 import mockPaymentSendMax from './mock_data/PaymentWithSendMax.json'
 import mockPaymentSourceTag from './mock_data/PaymentWithSourceTag.json'
+import { formatTransaction } from '../../../../../../rippled/lib/utils'
 
 const createWrapper = createTableDetailWrapperFactory(TableDetail)
 
 describe('Payment: TableDetail', () => {
   it('renders', () => {
-    const wrapper = createWrapper(mockPayment)
+    const wrapper = createWrapper(formatTransaction(mockPayment.result))
 
     // styling makes this look okay
     expect(wrapper.find('.payment')).toHaveText(

@@ -10,13 +10,13 @@ export const Description = ({ data }: any) => {
     <>
       <div data-test="channel-line">
         {t('update_payment_channel')}{' '}
-        <span className="channel">{data.tx.Channel}</span>
+        <span className="channel">{data.Channel}</span>
       </div>
-      {data.tx.Amount && (
+      {data.Amount && (
         <div data-test="amount-line">
           {t('increase_channel_amount_by')}{' '}
           <b>
-            <Amount value={data.tx.Amount} />
+            <Amount value={data.Amount} />
           </b>
           {node && (
             <span>

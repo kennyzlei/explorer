@@ -1,13 +1,13 @@
 import { mount } from 'enzyme'
 import { Route } from 'react-router-dom'
 import mockTransaction from './mock_data/Transaction.json'
-import mockTransactionSummary from './mock_data/TransactionSummary.json'
 import i18n from '../../../i18n/testConfig'
 import { Transaction } from '../index'
 import { TxStatus } from '../../shared/components/TxStatus'
 import { getTransaction } from '../../../rippled'
 import { Error as RippledError } from '../../../rippled/lib/utils'
 import { flushPromises, QuickHarness } from '../../test/utils'
+import { formatSingleTransaction } from '../../../rippled/transactions'
 
 jest.mock('../../../rippled', () => {
   const originalModule = jest.requireActual('../../../rippled')
@@ -101,10 +101,7 @@ describe('Transaction container', () => {
     let wrapper
 
     beforeEach(async () => {
-      const transaction = {
-        raw: mockTransaction,
-        summary: mockTransactionSummary,
-      }
+      const transaction = formatSingleTransaction(mockTransaction.result)
 
       mockedGetTransaction.mockImplementation(() =>
         Promise.resolve(transaction),
@@ -112,7 +109,8 @@ describe('Transaction container', () => {
     })
 
     it('renders summary section', async () => {
-      wrapper = createWrapper(mockTransaction.hash)
+      const hash = mockTransaction.result.hash
+      wrapper = createWrapper(hash)
       await flushPromises()
       wrapper.update()
 
@@ -124,8 +122,8 @@ describe('Transaction container', () => {
       )
       expect(
         summary.contains(
-          <div className="hash" title={mockTransaction.hash}>
-            {mockTransaction.hash}
+          <div className="hash" title={hash}>
+            {hash}
           </div>,
         ),
       ).toBe(true)

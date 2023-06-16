@@ -6,13 +6,13 @@ import { transactionTypes } from '../../shared/components/Transaction'
 export const TransactionDescription: FC<{ data: any }> = ({ data }) => {
   const { t } = useTranslation()
 
-  if (!data || !data.tx) {
+  if (!data) {
     return null
   }
 
   // Locate the component description section of the detail tab that is unique per TransactionType.
   const DescriptionComponent =
-    transactionTypes[data.tx.TransactionType]?.Description
+    transactionTypes[data.TransactionType]?.Description
 
   return (
     <div className="detail-section">
@@ -21,9 +21,9 @@ export const TransactionDescription: FC<{ data: any }> = ({ data }) => {
         {t('transaction_sequence')}{' '}
         <b>
           <Sequence
-            sequence={data.tx.Sequence}
-            ticketSequence={data.tx.TicketSequence}
-            account={data.tx.Account}
+            sequence={data.Sequence}
+            ticketSequence={data.TicketSequence}
+            account={data.Account}
             addContextHelp
           />
         </b>

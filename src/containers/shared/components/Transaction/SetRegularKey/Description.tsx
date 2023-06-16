@@ -3,7 +3,7 @@ import { TransactionDescriptionProps } from '../types'
 
 export const Description = ({ data }: TransactionDescriptionProps) => {
   const { t } = useTranslation()
-  const key = data.tx.RegularKey
+  const key = data.RegularKey
 
   return key ? (
     <div key="set_regular_key">

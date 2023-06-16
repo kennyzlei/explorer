@@ -1,6 +1,8 @@
 import { Trans, useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { FC } from 'react'
+import type { TxResponse } from 'xrpl'
+import type { TransactionMetadata } from 'xrpl/dist/npm/models/transactions'
 import { TransactionMeta } from './Meta'
 import { TransactionDescription } from './Description'
 import { Account } from '../shared/components/Account'
@@ -16,13 +18,13 @@ import {
 import './detailTab.scss'
 import { useLanguage } from '../shared/hooks'
 
-export const DetailTab: FC<{ data: any }> = ({ data }) => {
+export const DetailTab: FC<{ data: TxResponse['result'] }> = ({ data }) => {
   const { t } = useTranslation()
   const language = useLanguage()
 
   const renderStatus = () => {
-    const { TransactionResult } = data.meta
-    const time = localizeDate(new Date(data.date), language, DATE_OPTIONS)
+    const { TransactionResult } = data?.meta as TransactionMetadata
+    const time = localizeDate(new Date(data.date || ''), language, DATE_OPTIONS)
     let line1
 
     if (TransactionResult === SUCCESSFUL_TRANSACTION) {
@@ -66,9 +68,9 @@ export const DetailTab: FC<{ data: any }> = ({ data }) => {
 
   const renderFee = () => {
     const numberOptions = { ...CURRENCY_OPTIONS, currency: 'XRP' }
-    const totalCost = data.tx.Fee
+    const totalCost = data.Fee
       ? localizeNumber(
-          Number.parseFloat(data.tx.Fee) / XRP_BASE,
+          Number.parseFloat(data.Fee || '') / XRP_BASE,
           language,
           numberOptions,
         )
@@ -104,11 +106,11 @@ export const DetailTab: FC<{ data: any }> = ({ data }) => {
   }
 
   const renderSigners = () =>
-    data.tx.Signers ? (
+    data.Signers ? (
       <div className="detail-section">
         <div className="title">{t('signers')}</div>
         <ul className="signers">
-          {data.tx.Signers.map((d) => (
+          {data.Signers.map((d) => (
             <li key={d.Signer.Account}>
               <Account account={d.Signer.Account} />
             </li>

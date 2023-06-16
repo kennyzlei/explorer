@@ -20,7 +20,7 @@ const Description: TransactionDescriptionComponent = (
   return (
     <>
       <div>
-        {t('escrow_cancellation_desc')} <Account account={data.tx.Account} />
+        {t('escrow_cancellation_desc')} <Account account={data.Account} />
       </div>
       <div>
         <Trans i18nKey="escrow_cancellation_desc_2">
@@ -30,17 +30,14 @@ const Description: TransactionDescriptionComponent = (
             <small>XRP</small>
           </b>
           was returned to
-          <Account account={data.tx.Owner} />
+          <Account account={data.Owner} />
         </Trans>
-        {data.tx.Owner === data.tx.Account && (
+        {data.Owner === data.Account && (
           <span>
             {' '}
             (
             <b>
-              {normalizeAmount(
-                deleted.FinalFields.Amount - data.tx.Fee,
-                language,
-              )}
+              {normalizeAmount(deleted.FinalFields.Amount - data.Fee, language)}
               <small>XRP</small>
             </b>{' '}
             {t('escrow_after_transaction_cost')})
@@ -49,7 +46,7 @@ const Description: TransactionDescriptionComponent = (
       </div>
       <Trans i18nKey="escrow_created_by_desc">
         The escrow was created by
-        <Account account={data.tx.Owner} />
+        <Account account={data.Owner} />
         with transaction
         <Link
           className="hash"

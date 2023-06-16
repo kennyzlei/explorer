@@ -56,9 +56,9 @@ export const TransactionMeta: FC<{ data: any }> = ({ data }) => {
           count: data.meta.AffectedNodes.length,
         })}
       </div>
-      {renderNodesMeta('created', affectedNodes.created, data.tx)}
-      {renderNodesMeta('modified', affectedNodes.modified, data.tx)}
-      {renderNodesMeta('deleted', affectedNodes.deleted, data.tx)}
+      {renderNodesMeta('created', affectedNodes.created, data)}
+      {renderNodesMeta('modified', affectedNodes.modified, data)}
+      {renderNodesMeta('deleted', affectedNodes.deleted, data)}
     </div>
   )
 }

@@ -8,7 +8,8 @@ import mockUNLModifyEnable from './mock_data/UNLModifyEnable.json'
 import mockUNLModifyDisable from './mock_data/UNLModifyDisable.json'
 import { SimpleTab } from '../../../../../Transactions/SimpleTab'
 import { QuickHarness } from '../../../../../test/utils'
-import summarizeTransaction from '../../../../../../rippled/lib/txSummary'
+import { formatSingleTransaction } from '../../../../../../rippled/transactions'
+import { formatTransaction } from '../../../../../../rippled/lib/utils'
 
 const createWrapper = createSimpleWrapperFactory(Simple, i18n)
 
@@ -27,7 +28,9 @@ describe('UNLModify: Simple', () => {
   })
 
   it('renders tx that disables a validator', () => {
-    const wrapper = createWrapper(mockUNLModifyDisable)
+    const wrapper = createWrapper(
+      formatTransaction(mockUNLModifyDisable.result),
+    )
     expectSimpleRowLabel(wrapper, 'validator', 'Validator')
     expectSimpleRowText(
       wrapper,
@@ -43,10 +46,7 @@ describe('UNLModify: Simple', () => {
     const wrapper = mount(
       <QuickHarness i18n={i18n}>
         <SimpleTab
-          data={{
-            raw: mockUNLModifyDisable,
-            summary: summarizeTransaction(mockUNLModifyDisable, true).details,
-          }}
+          data={formatSingleTransaction(mockUNLModifyDisable.result)}
           width={800}
         />
       </QuickHarness>,

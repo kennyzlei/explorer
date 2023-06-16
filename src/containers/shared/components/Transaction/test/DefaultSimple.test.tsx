@@ -4,12 +4,13 @@ import SetHook2 from './mock_data/SetHook2.json'
 import { DefaultSimple } from '../DefaultSimple'
 import { createSimpleWrapperFactory } from './createWrapperFactory'
 import { expectSimpleRowText } from './expectations'
+import { formatTransaction } from '../../../../../rippled/lib/utils'
 
 const createWrapper = createSimpleWrapperFactory(DefaultSimple)
 
 describe('DefaultSimple', () => {
   it('renders Simple for basic transaction', () => {
-    const wrapper = createWrapper(NewEscrowCreate)
+    const wrapper = createWrapper(formatTransaction(NewEscrowCreate.result))
     expectSimpleRowText(
       wrapper,
       'Destination',

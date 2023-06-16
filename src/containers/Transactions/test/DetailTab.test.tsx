@@ -11,7 +11,7 @@ describe('DetailTab container', () => {
     mount(
       <Router>
         <I18nextProvider i18n={i18n}>
-          <DetailTab data={transaction} />
+          <DetailTab data={transaction.result} />
         </I18nextProvider>
       </Router>,
     )

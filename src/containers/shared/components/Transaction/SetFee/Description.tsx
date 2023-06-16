@@ -4,7 +4,7 @@ import { parser } from './parser'
 import { Amount } from '../../Amount'
 
 export const Description = ({ data }: TransactionDescriptionProps) => {
-  const { fee, reserve, increment } = parser(data.tx)
+  const { fee, reserve, increment } = parser(data)
 
   return (
     <>

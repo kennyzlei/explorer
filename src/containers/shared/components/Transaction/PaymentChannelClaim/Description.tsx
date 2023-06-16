@@ -21,18 +21,18 @@ export const Description = ({
   return (
     <>
       <div data-test="account-line">
-        {t('transaction_initiated_by')} <Account account={data.tx.Account} />
+        {t('transaction_initiated_by')} <Account account={data.Account} />
       </div>
       <div data-test="channel-line">
         {t('update_payment_channel')}{' '}
-        <span className="channel">{data.tx.Channel}</span>
+        <span className="channel">{data.Channel}</span>
       </div>
-      {data.tx.Balance && (
+      {data.Balance && (
         <div data-test="balance-line">
           {t('the_channel_balance_is')}
           <b>
             {' '}
-            {normalizeAmount(data.tx.Balance, language)}
+            {normalizeAmount(data.Balance, language)}
             <small>XRP</small>
           </b>
           {change && (

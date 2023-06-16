@@ -74,8 +74,8 @@ export const Transaction = () => {
   useEffect(() => {
     if (!data?.raw) return
 
-    const type = data?.raw.tx.TransactionType
-    const status = data?.raw.meta.TransactionResult
+    const type = data?.summary.type
+    const status = data?.summary.result
 
     const transactionProperties: AnalyticsFields = {
       transaction_action: getAction(type),
@@ -91,13 +91,14 @@ export const Transaction = () => {
   }, [identifier, data?.raw, tab, trackScreenLoaded])
 
   function renderSummary() {
-    const type = data?.raw.tx.TransactionType
+    if (!data) return
+    const { hash, type } = data.summary
     return (
       <div className="summary">
         <div className="type">{type}</div>
-        <TxStatus status={data?.raw.meta.TransactionResult} />
-        <div className="hash" title={data?.raw.hash}>
-          {data?.raw.hash}
+        <TxStatus status={data.summary.result} />
+        <div className="hash" title={hash}>
+          {hash}
         </div>
       </div>
     )
@@ -151,7 +152,7 @@ export const Transaction = () => {
   if (isError) {
     const message = getErrorMessage(error)
     body = <NoMatch title={message.title} hints={message.hints} />
-  } else if (data?.raw && data?.raw.hash) {
+  } else if (data?.summary.hash) {
     body = renderTransaction()
   } else if (!identifier) {
     body = (

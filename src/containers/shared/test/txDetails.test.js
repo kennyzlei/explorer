@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import i18n from '../../../i18n/testConfig'
 import EnableAmendment from '../../Transactions/test/mock_data/EnableAmendment.json'
 import { TxDetails } from '../components/TxDetails'
-import summarize from '../../../rippled/lib/txSummary'
+import { formatSingleTransaction } from '../../../rippled/transactions'
 
 describe('TxDetails', () => {
   const createWrapper = (tx) =>
@@ -14,8 +14,10 @@ describe('TxDetails', () => {
           <TxDetails
             t={(s) => s}
             language="en-US"
-            instructions={summarize(tx, true).details.instructions}
-            type={tx.tx.TransactionType}
+            instructions={
+              formatSingleTransaction(tx.result).summary.instructions
+            }
+            type={tx.result.TransactionType}
           />
         </I18nextProvider>
       </Router>,

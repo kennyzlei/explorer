@@ -1,3 +1,4 @@
+import type { Payment } from 'xrpl'
 import i18n from '../../../../../../i18n/testConfigEnglish'
 import { Description } from '../Description'
 
@@ -8,12 +9,18 @@ import mockPaymentPartial from './mock_data/PaymentWithPartial.json'
 import mockPaymentSendMax from './mock_data/PaymentWithSendMax.json'
 import mockPaymentSourceTag from './mock_data/PaymentWithSourceTag.json'
 import { createDescriptionWrapperFactory } from '../../test'
+import { TxResponseWithMeta } from '../../../../../../rippled/transactions'
 
-const createWrapper = createDescriptionWrapperFactory(Description, i18n)
+const createWrapper = createDescriptionWrapperFactory<Payment>(
+  Description,
+  i18n,
+)
 
 describe('Payment: Description', () => {
   it('renders', () => {
-    const wrapper = createWrapper(mockPayment)
+    const wrapper = createWrapper(
+      (mockPayment as TxResponseWithMeta<Payment>).result,
+    )
 
     expect(wrapper.find('[data-test="from-to-line"]')).toHaveText(
       `The payment is from rNQEMJA4PsoSrZRn9J6RajAYhcDzzhf8ok to rHoPwMC75KVUhBMeV3uDMybKG5JND74teh`,
@@ -31,7 +38,9 @@ describe('Payment: Description', () => {
   })
 
   it('renders with failed partial conversion', () => {
-    const wrapper = createWrapper(mockPaymentConvert)
+    const wrapper = createWrapper(
+      (mockPaymentConvert as TxResponseWithMeta<Payment>).result,
+    )
 
     expect(wrapper.find('[data-test="from-to-line"]')).toHaveText(
       `The payment is from r9x5PHDiwuvbpYB3uvGAqEUVV5wxHayQEx to r9x5PHDiwuvbpYB3uvGAqEUVV5wxHayQEx`,
@@ -47,7 +56,9 @@ describe('Payment: Description', () => {
   })
 
   it('renders with destination tag', () => {
-    const wrapper = createWrapper(mockPaymentDestinationTag)
+    const wrapper = createWrapper(
+      (mockPaymentDestinationTag as TxResponseWithMeta<Payment>).result,
+    )
 
     expect(wrapper.find('[data-test="from-to-line"]')).toHaveText(
       `The payment is from rDAE53VfMvftPB4ogpWGWvzkQxfht6JPxr to rHWcuuZoFvDS6gNbmHSdpb7u1hZzxvCoMt`,
@@ -67,7 +78,9 @@ describe('Payment: Description', () => {
   })
 
   it('renders with send max', () => {
-    const wrapper = createWrapper(mockPaymentSendMax)
+    const wrapper = createWrapper(
+      (mockPaymentSendMax as TxResponseWithMeta<Payment>).result,
+    )
 
     expect(wrapper.find('[data-test="from-to-line"]')).toHaveText(
       `The payment is from r3RaNVLvWjqqtFAawC6jbRhgKyFH7HvRS8 to rprcTynT68nYdKzDTefAZG9HjSHiYcnP4b`,
@@ -86,7 +99,9 @@ describe('Payment: Description', () => {
   })
 
   it('renders with partial', () => {
-    const wrapper = createWrapper(mockPaymentPartial)
+    const wrapper = createWrapper(
+      (mockPaymentPartial as TxResponseWithMeta<Payment>).result,
+    )
 
     expect(wrapper.find('[data-test="from-to-line"]')).toHaveText(
       `The payment is from rGTurN94Nn3RkJGSqy9MwmQCLpXZkELbnq to rMQ4oGC8fasuJwfdrfknFTttDbf8cR3D2j`,
@@ -106,7 +121,9 @@ describe('Payment: Description', () => {
   })
 
   it('renders with SourceTag', () => {
-    const wrapper = createWrapper(mockPaymentSourceTag)
+    const wrapper = createWrapper(
+      (mockPaymentSourceTag as TxResponseWithMeta<Payment>).result,
+    )
 
     expect(wrapper.find('[data-test="source-tag-line"]')).toHaveText(
       `The source tag is 20648`,

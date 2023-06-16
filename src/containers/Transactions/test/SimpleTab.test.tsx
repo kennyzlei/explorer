@@ -5,19 +5,17 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import EnableAmendment from './mock_data/EnableAmendment.json'
 import Payment from '../../shared/components/Transaction/Payment/test/mock_data/Payment.json'
 import { SimpleTab } from '../SimpleTab'
-import summarize from '../../../rippled/lib/txSummary'
 import i18n from '../../../i18n/testConfig'
 import { expectSimpleRowText } from '../../shared/components/Transaction/test'
+import NewEscrowCreate from '../../shared/components/Transaction/test/mock_data/NewEscrowCreate.json'
+import { formatSingleTransaction } from '../../../rippled/transactions'
 
 describe('SimpleTab container', () => {
   const createWrapper = (tx, width = 1200) =>
     mount(
       <Router>
         <I18nextProvider i18n={i18n}>
-          <SimpleTab
-            data={{ raw: tx, summary: summarize(tx, true).details }}
-            width={width}
-          />
+          <SimpleTab data={formatSingleTransaction(tx.result)} width={width} />
         </I18nextProvider>
       </Router>,
     )
@@ -41,5 +39,10 @@ describe('SimpleTab container', () => {
     expectSimpleRowText(wrapper, 'sequence', '31030')
     expectSimpleRowText(wrapper, 'tx-cost', '\uE9000.15')
     wrapper.unmount()
+  })
+
+  it('renders a default view for an undefined type', () => {
+    const wrapper = createWrapper(NewEscrowCreate)
+    expect(wrapper.find(`[data-test="Destination"] a`)).toExist()
   })
 })

@@ -3,6 +3,7 @@ import { ReactElement } from 'react'
 import { I18nextProvider } from 'react-i18next'
 import { BrowserRouter } from 'react-router-dom'
 import { i18n } from 'i18next'
+import { BaseTransaction } from 'xrpl/dist/npm/models/transactions/common'
 import defaultI18nConfig from '../../../../../i18n/testConfig'
 import summarizeTransaction from '../../../../../rippled/lib/txSummary'
 import {
@@ -10,6 +11,10 @@ import {
   TransactionSimpleComponent,
   TransactionTableDetailComponent,
 } from '../types'
+import {
+  formatSingleTransaction,
+  TxResponseWithMeta,
+} from '../../../../../rippled/transactions'
 
 /**
  * Methods that produce createWrapper function for tests
@@ -28,12 +33,12 @@ export function createWrapper(
   )
 }
 
-export function createDescriptionWrapperFactory(
-  Description: TransactionDescriptionComponent,
+export function createDescriptionWrapperFactory<T extends BaseTransaction>(
+  Description: TransactionDescriptionComponent<T>,
   i18nConfig?: i18n,
-): (tx: any) => ReactWrapper {
-  return function createDescriptionWrapper(tx: any) {
-    return createWrapper(<Description data={tx} />, i18nConfig)
+): (tx: TxResponseWithMeta<T>) => ReactWrapper {
+  return function createDescriptionWrapper(tx: TxResponseWithMeta<T>) {
+    return createWrapper(<Description data={tx.result} />, i18nConfig)
   }
 }
 
@@ -42,8 +47,8 @@ export function createSimpleWrapperFactory(
   i18nConfig?: i18n,
 ): (tx: any) => ReactWrapper {
   return function createSimpleWrapper(tx: any) {
-    const data = summarizeTransaction(tx, true)
-    return createWrapper(<Simple data={data.details!} />, i18nConfig)
+    const data = formatSingleTransaction(tx.result)
+    return createWrapper(<Simple data={data.summary} />, i18nConfig)
   }
 }
 

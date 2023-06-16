@@ -1,4 +1,5 @@
 import { useTranslation, Trans } from 'react-i18next'
+import type { OfferCreate } from 'xrpl'
 import { localizeDate } from '../../../utils'
 import {
   DATE_OPTIONS,
@@ -15,16 +16,22 @@ import {
 
 const normalize = (amount: any) => amount.value || amount / XRP_BASE
 
-const Description: TransactionDescriptionComponent = (
-  props: TransactionDescriptionProps,
+const Description: TransactionDescriptionComponent<OfferCreate> = (
+  props: TransactionDescriptionProps<OfferCreate>,
 ) => {
   const { t, i18n } = useTranslation()
   const language = i18n.resolvedLanguage
   const { data } = props
-  const paysCurrency = data.tx.TakerPays.currency || 'XRP'
-  const getsCurrency = data.tx.TakerGets.currency || 'XRP'
-  const paysValue = normalize(data.tx.TakerPays)
-  const getsValue = normalize(data.tx.TakerGets)
+  const paysCurrency =
+    typeof data.TakerPays !== 'string' && 'currency' in data.TakerPays
+      ? data.TakerPays.currency
+      : 'XRP'
+  const getsCurrency =
+    typeof data.TakerGets !== 'string' && 'currency' in data.TakerGets
+      ? data.TakerGets.currency
+      : 'XRP'
+  const paysValue = normalize(data.TakerPays)
+  const getsValue = normalize(data.TakerGets)
   const invert =
     CURRENCY_ORDER.indexOf(getsCurrency) > CURRENCY_ORDER.indexOf(paysCurrency)
 
@@ -38,8 +45,8 @@ const Description: TransactionDescriptionComponent = (
     pair = `${paysCurrency}/${getsCurrency}`
   }
 
-  const renderLine4 = () => {
-    const unixT = (data.tx.Expiration + RIPPLE_EPOCH) * 1000
+  const renderLine4 = (expiration: number) => {
+    const unixT = (expiration + RIPPLE_EPOCH) * 1000
     const today = new Date()
     const transString =
       unixT - today.getTime() > 0
@@ -63,16 +70,16 @@ const Description: TransactionDescriptionComponent = (
       <div key="line1">
         <Trans i18nKey="offer_create_desc_line_1">
           The account
-          <Account account={data.tx.Account} />
+          <Account account={data.Account} />
           offered to pay
           <b>
-            {normalizeAmount(data.tx.TakerGets, language)}
-            <small>{data.tx.TakerGets.currency || 'XRP'}</small>
+            {normalizeAmount(data.TakerGets, language)}
+            <small>{getsCurrency}</small>
           </b>
           in order to receive
           <b>
-            {normalizeAmount(data.tx.TakerPays, language)}
-            <small>{data.tx.TakerPays.currency || 'XRP'}</small>
+            {normalizeAmount(data.TakerPays, language)}
+            <small>{paysCurrency}</small>
           </b>
         </Trans>
       </div>
@@ -83,13 +90,13 @@ const Description: TransactionDescriptionComponent = (
           <small>{pair}</small>
         </b>
       </div>
-      {data.tx.OfferSequence && (
+      {data.OfferSequence && (
         <div key="line3">
           {t('offer_create_desc_line_3')}
-          <b> {data.tx.OfferSequence}</b>
+          <b> {data.OfferSequence}</b>
         </div>
       )}
-      {data.tx.Expiration && renderLine4()}
+      {data.Expiration && renderLine4(data.Expiration)}
     </>
   )
 }

@@ -11,7 +11,7 @@ export const Description = ({
   return (
     <div data-test="cancel-line">
       {t('offer_cancel_description')}
-      <b>{data.tx.OfferSequence}</b>
+      <b>{data.OfferSequence}</b>
     </div>
   )
 }

@@ -1,5 +1,7 @@
 import { FC } from 'react'
+import type { BaseTransaction } from 'xrpl/dist/npm/models/transactions/common'
 import { Memo } from '../../types'
+import type { TxResponseWithMeta } from '../../../../rippled/transactions'
 
 export enum TransactionCategory {
   DEX = 'DEX',
@@ -25,24 +27,26 @@ export interface TransactionTableDetailProps<I = any> {
 }
 export type TransactionTableDetailComponent = FC<TransactionTableDetailProps>
 
-export interface TransactionDescriptionProps<T = any, M = any> {
-  data: {
-    tx: T
-    meta: M
-  }
+export interface TransactionDescriptionProps<T extends BaseTransaction> {
+  data: TxResponseWithMeta<T>['result']
 }
-export type TransactionDescriptionComponent = FC<TransactionDescriptionProps>
+
+export type TransactionDescriptionComponent<T extends BaseTransaction> = (
+  props: TransactionDescriptionProps<T>,
+) => JSX.Element
 
 export interface TransactionSimpleProps<I = any> {
   data: {
-    instructions: I
+    instructions?: I
   }
 }
 export type TransactionSimpleComponent = FC<TransactionSimpleProps>
 export type TransactionParser<T = any, I = any> = (tx: T, meta: any) => I
 
-export interface TransactionMapping {
-  Description?: TransactionDescriptionComponent
+export interface TransactionMapping<
+  T extends BaseTransaction = BaseTransaction,
+> {
+  Description?: TransactionDescriptionComponent<T>
   Simple: TransactionSimpleComponent
   TableDetail?: TransactionTableDetailComponent
   parser: TransactionParser

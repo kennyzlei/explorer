@@ -10,12 +10,13 @@ import mockPaymentDestinationTag from './mock_data/PaymentWithDestinationTag.jso
 import mockPaymentPartial from './mock_data/PaymentWithPartial.json'
 import mockPaymentSendMax from './mock_data/PaymentWithSendMax.json'
 import mockPaymentSourceTag from './mock_data/PaymentWithSourceTag.json'
+import { formatTransaction } from '../../../../../../rippled/lib/utils'
 
 const createWrapper = createSimpleWrapperFactory(Simple)
 
 describe('Payment: Simple', () => {
   it('renders', () => {
-    const wrapper = createWrapper(mockPayment)
+    const wrapper = createWrapper(formatTransaction(mockPayment.result))
 
     expectSimpleRowText(wrapper, 'amount', `\uE9002,421.8268 XRP`)
     expectSimpleRowLabel(wrapper, 'amount', `send`)

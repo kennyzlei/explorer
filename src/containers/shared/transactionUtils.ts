@@ -1,3 +1,4 @@
+import { TxResponse } from 'xrpl'
 import { IssuedCurrencyAmount, Transaction, Node } from './types'
 import { localizeNumber } from './utils'
 
@@ -154,28 +155,28 @@ export function decodeHex(hex: string) {
   return str
 }
 
-export function buildMemos(trans: Transaction) {
-  const { Memos = [] } = trans.tx
+export function buildMemos(trans: TxResponse['result']) {
+  const { Memos = [] } = trans
   const memoList: string[] = []
   Memos.forEach((data) => {
-    if (hexMatch.test(data.Memo.MemoType)) {
+    if (data.Memo.MemoType && hexMatch.test(data.Memo?.MemoType)) {
       memoList.push(decodeHex(data.Memo.MemoType))
     }
 
-    if (hexMatch.test(data.Memo.MemoData)) {
+    if (data.Memo.MemoData && hexMatch.test(data.Memo.MemoData)) {
       memoList.push(decodeHex(data.Memo.MemoData))
     }
 
-    if (hexMatch.test(data.Memo.MemoFormat)) {
+    if (data.Memo.MemoFormat && hexMatch.test(data.Memo.MemoFormat)) {
       memoList.push(decodeHex(data.Memo.MemoFormat))
     }
   })
   return memoList
 }
 
-export function buildFlags(trans: Transaction) {
-  const flags = TX_FLAGS[trans.tx.TransactionType] || {}
-  const bits = zeroPad((trans.tx.Flags || 0).toString(2), 32).split('')
+export function buildFlags(trans: TxResponse['result']) {
+  const flags = TX_FLAGS[trans.TransactionType] || {}
+  const bits = zeroPad((trans.Flags || 0).toString(), 32).split('')
 
   return bits
     .map((value, i) => {

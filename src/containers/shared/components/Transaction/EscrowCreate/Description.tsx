@@ -18,52 +18,52 @@ const Description: TransactionDescriptionComponent = (
   const language = i18n.resolvedLanguage
   const { data } = props
   const cancelAfter = localizeDate(
-    (data.tx.CancelAfter + RIPPLE_EPOCH) * 1000,
+    (data.CancelAfter + RIPPLE_EPOCH) * 1000,
     language,
     DATE_OPTIONS,
   )
   const finishAfter = localizeDate(
-    (data.tx.FinishAfter + RIPPLE_EPOCH) * 1000,
+    (data.FinishAfter + RIPPLE_EPOCH) * 1000,
     language,
     DATE_OPTIONS,
   )
   return (
     <>
-      {data.tx.Destination !== data.tx.Account ? (
+      {data.Destination !== data.Account ? (
         <Trans i18nKey="escrow_is_from">
           The escrow is from
-          <Account account={data.tx.Account} />
+          <Account account={data.Account} />
           to
-          <Account account={data.tx.Destination} />
+          <Account account={data.Destination} />
         </Trans>
       ) : (
         <Trans i18nKey="escrow_is_created_by">
           the escrow was created by
-          <Account account={data.tx.Account} />
+          <Account account={data.Account} />
           and the funds will be returned to the same account
         </Trans>
       )}
-      {data.tx.Condition && (
+      {data.Condition && (
         <div>
           {t('escrow_condition')}
-          <span className="condition"> {data.tx.Condition}</span>
+          <span className="condition"> {data.Condition}</span>
         </div>
       )}
       <div>
         {t('escrowed_amount')}
         <b>
           {' '}
-          {normalizeAmount(data.tx.Amount, language)}
+          {normalizeAmount(data.Amount, language)}
           <small>XRP</small>
         </b>
       </div>
-      {data.tx.CancelAfter && (
+      {data.CancelAfter && (
         <div>
           {t('describe_cancel_after')}
           <span className="time">{` ${cancelAfter} ${DATE_OPTIONS.timeZone}`}</span>
         </div>
       )}
-      {data.tx.FinishAfter && (
+      {data.FinishAfter && (
         <div>
           {t('describe_finish_after')}
           <span className="time">{` ${finishAfter} ${DATE_OPTIONS.timeZone}`}</span>

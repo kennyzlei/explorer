@@ -7,9 +7,10 @@ import OfferCancel from '../../shared/components/Transaction/OfferCancel/test/mo
 import OfferCreateWithMissingPreviousFields from '../../shared/components/Transaction/OfferCreate/test/mock_data/OfferCreateWithMissingPreviousFields.json'
 import PaymentChannelClaim from '../../shared/components/Transaction/PaymentChannelClaim/test/mock_data/PaymentChannelClaim.json'
 import { TransactionMeta } from '../Meta'
+import { formatTransaction } from '../../../rippled/lib/utils'
 
 describe('TransactionMeta container', () => {
-  const createWrapper = (data: any = Transaction) =>
+  const createWrapper = (data: any = formatTransaction(Transaction.result)) =>
     mount(
       <Router>
         <I18nextProvider i18n={i18n}>
